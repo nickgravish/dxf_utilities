@@ -33,7 +33,8 @@ def get_dxf_layer_names(dwg):
 #%%
 def parse_layer_names(layer_names):
     """
-    test function to parse the
+    test function to parse layer names. Currently unused
+    """
     parsenumbers = re.compile(r'\\d+')
     
     for kk, layer_name in enumerate(layer_names):
@@ -41,6 +42,11 @@ def parse_layer_names(layer_names):
 
 #%%
 def compute_bounding_box(dwg, layer):
+    """
+    Compute the bounding box of the current layer, computed from the lines
+    that form the layer boundary
+    """
+    
     modelspace = dwg.modelspace()
     points = [];
     
@@ -67,7 +73,12 @@ def compute_bounding_box(dwg, layer):
     
 #%% 
 def copy_all_entities_from_layer(dwg, new_dwg, layer, center_point = (0,0,0)):
-# skip if no lines to copy
+    """
+    Copy entities from one layer to another, with an offset to re-center the points
+    in the new layer
+    """    
+
+    # skip if no lines to copy
     center_point = np.array(center_point)
     # next copy all layer entities to new file, subtract
     modelspace = dwg.modelspace()
@@ -112,6 +123,9 @@ def copy_all_entities_from_layer(dwg, new_dwg, layer, center_point = (0,0,0)):
 def rip_layers_to_new_file(dwg):
 
     """
+    Rips out individual layers from a layered dxf file and creates separate files.
+    Sometimes useful for varying power, speed of cuts layer by layer
+    
     Makes assumption that geometry is bounded by a rectangle
     """
     layer_names = get_dxf_layer_names(dwg)
@@ -188,8 +202,14 @@ def rip_layers_to_new_file(dwg):
 
 def tile_dxf(dwg):
     """
-    Take in a dxf drawing handle. Tile each layer that is the same. 
-    At max, assume can fit 
+    Take in a dxf drawing handle. Tile each layer that is the same material.
+    Naming convention of layers is NUMBER_MATERIAL
+    so 1_KA  --> layer 1, kapton. 
+       6_ADH --> laye 6, adhesive.
+       
+    Script tiles according to an assumed geometry of 25x25 mm tile spacing, and
+    over a footprint of 3 x n wide tiling.
+
     """    
     
     tile_space = (25, 25) # mm
