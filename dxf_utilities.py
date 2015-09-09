@@ -9,11 +9,6 @@ Created on Wed Sep  9 00:45:53 2015
 
 #%%
 
-import ezdxf
-import re
-import numpy as np
-
-
 #%% 
 
 def get_dxf_layer_names(dwg):

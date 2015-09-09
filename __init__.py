@@ -6,3 +6,7 @@ date:10/9/2015
 """
 from dxf_utilities import *
 
+import ezdxf
+import re
+import numpy as np
+
